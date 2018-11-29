@@ -23,16 +23,13 @@ hidden_layer_size = 50
 tf.reset_default_graph()
 
 #Declare the placeholders
-# Placeholders are tensorflow objects and its where we feed the data
-# the data in our dataset will go to the placeholders, which includes the X and y (inputs and the targets)
-# float32 indicates the type of data we want is always efficient for most calculations
+
 inputs = tf.placeholder(tf.float32, [None, input_size])
 targets = tf.placeholder(tf.float32, [None, output_size])
 
 
 # 1. Creating the first layer (input layer)
-# defining the variables
-#tf.variables is a function used to declare variables. the default initializer is Xavier Glorot
+
 weights_1 = tf.get_variable("weights_1", [input_size, hidden_layer_size])
 biases_1 = tf.get_variable("biases_1", [hidden_layer_size])
 
@@ -67,13 +64,12 @@ optimize = tf.train.AdamOptimizer(learning_rate = 0.001).minimize(mean_loss)
 # Adam Optimiser is the bbest advanced optimiser
 
 # Calculating the prediction accurancy
-# tf.argmax() returns the index with the highest value
-# tf.equal() is a method to check if 2 variables are equal in tensorflow, boolean type
+
 out_equals_target = tf.equal(tf.argmax(outputs,1), tf.argmax(targets,1))
 accuracy = tf.reduce_mean(tf.cast(out_equals_target, tf.float32))
 
 # Preparation for execution of the tensorflow model
-# we use tf.interactivesession() when we want to perform execution in tensorflow
+
 sess = tf.InteractiveSession()
 
 # Initialising the variables
