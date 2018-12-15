@@ -45,3 +45,63 @@ for i in range(dataset2.shape[1]):
     
     plt.hist(dataset2.iloc[:, i], bins=vals, color='#3F5D7D')
 plt.tight_layout(rect=[0, 0.03, 1, 0.95]) # laying out the rectangle
+
+dataset2.corrwith(dataset.e_signed).plot.bar(figsize = (20,10), title = "Correlation with E-signed", fontsize = 6, rot = 45, grid = True)
+
+###### Correlation Matrix
+sn.set(style="white")
+
+# Computing the correlation matrix
+corr = dataset2.corr()
+
+# Generating a mask for the upper triangle
+mask = np.zeros_like(corr, dtype=np.bool)
+mask[np.triu_indices_from(mask)] = True
+
+# Setting up the matplotlib figure
+f, ax = plt.subplots(figsize=(18, 15))
+
+# Generating a custom diverging colormap
+cmap = sn.diverging_palette(220, 10, as_cmap=True)
+
+# Drawing the heatmap with the mask and correct aspect ratio
+sn.heatmap(corr, mask=mask, cmap=cmap, vmax=.3, center=0,
+            square=True, linewidths=.5, cbar_kws={"shrink": .5})
+
+
+import random
+import time
+
+random.seed(100)
+
+### Feature Engineering
+dataset = dataset.drop(columns = ["months_employed"]) 
+dataset["personal_account_months"] = (dataset.personal_account_m + (dataset.personal_account_y * 12))
+dataset[['personal_account_m', 'personal_account_y', 'personal_account_months']].head() 
+dataset = dataset.drop(columns = ["personal_account_m", "personal_account_y"])
+
+##### One Hot Encoding
+dataset = pd.get_dummies(dataset)
+dataset.columns
+dataset = dataset.drop(columns = ["pay_schedule_semi-monthly"])
+
+response = dataset['e_signed']
+users = dataset['entry_id']
+dataset = dataset.drop(columns = ['e_signed', 'entry_id'])
+
+# Splitting into Trainng set and Test set
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(dataset, response, test_size=0.2, random_state=0)
+
+####   Feature Scaling
+from sklearn.preprocessing import StandardScaler
+sc_X = StandardScaler()
+X_train2 = pd.DataFrame(sc_X.fit_transform(X_train))
+X_test2 = pd.DataFrame(sc_X.transform(X_test))
+X_train2.columns = X_train.columns.values
+X_test2.columns = X_test.columns.values
+X_train2.index = X_train.index.values
+X_test2.index = X_test.index.values
+X_train = X_train2
+X_test = X_test2
+
