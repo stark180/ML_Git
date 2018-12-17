@@ -158,3 +158,21 @@ model_results = pd.DataFrame([['SVM (Gaussian rbf)', acc, prec, rec, f1]],
                columns = ['Model', 'Accuracy', 'Precision', 'Recall', 'F1 Score'])
 # append the model results of the SVM to to the result dataframe
 results = results.append(model_results, ignore_index = True)
+
+## Random Forest 
+from sklearn.ensemble import RandomForestClassifier
+classifier = RandomForestClassifier(random_state=0, n_estimators = 100, criterion = 'entropy')
+classifier.fit(X_train, y_train)
+# predicting the test set
+y_pred = classifier.predict(X_test)
+# determining the accurancy and performance
+from sklearn.metrics import confusion_matrix, accuracy_score, f1_score, precision_score, recall_score
+acc = accuracy_score(y_test, y_pred)
+prec =  precision_score(y_test, y_pred)
+rec =  recall_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+# store the results in a pandas dataframe
+model_results = pd.DataFrame([['Random Forest (n=100)', acc, prec, rec, f1]], 
+               columns = ['Model', 'Accuracy', 'Precision', 'Recall', 'F1 Score'])
+# append the model results of the SVM to to the result dataframe
+results = results.append(model_results, ignore_index = True)
