@@ -120,5 +120,5 @@ prec =  precision_score(y_test, y_pred)
 rec =  recall_score(y_test, y_pred)
 f1 = f1_score(y_test, y_pred)
 # store the results in a pandas dataframe
-pd.DataFrame([['Linear Regression (lasso)', acc, prec, rec, f1]], 
+results = pd.DataFrame([['Linear Regression (lasso)', acc, prec, rec, f1]], 
                columns = ['Model', 'Accuracy', 'Precision', 'Recall', 'F1 Score'])
