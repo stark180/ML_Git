@@ -181,3 +181,35 @@ results = results.append(model_results, ignore_index = True)
 from sklearn.model_selection import cross_val_score
 accuracies = cross_val_score(estimator = classifier, X = X_train, y = y_train, cv = 10) # Ten cross validations will be made
 print("Random Forest Classifier Accuracy: %0.2f (+/- %0.2f)" % (accuracies.mean(), accuracies.std() * 2))
+
+######## Parameter Tuning 
+
+## Applying the Grid Search Algorithm
+
+# Round 1: Entropy
+
+parameters = {"max_depth": [1, None],
+              "max_features": [1, 5, 10],
+              "min_samples_split": [2, 5, 10],
+              "min_samples_leaf": [1, 5, 10],
+              "bootstrap": [True, False],
+              "criterion": ["entropy"]}
+
+# creating the Grid Search estimator
+from sklearn.model_selection import GridSearchCV
+grid_search = GridSearchCV(estimator = classifier, 
+                           param_grid = parameters, 
+                           scoring = 'accuracy', 
+                           cv = 10, 
+                           n_jobs = -1) 
+# cv = 10 means 10 K-fold validations and n_jobs = -1 means use all the available CPU memory on the computer
+
+# determine the execution time for the grid search algorithm
+t0 = time.time()
+grid_search = grid_search.fit(X_train, y_train)
+t1 = time.time()
+print("Took 0.2f seconds" % (t1-t0))
+
+rf_best_accuracy = grid_search.best_score_
+rf_best_parameters = grid_search.best_params_
+rf_best_accuracy, rf_best_parameters
