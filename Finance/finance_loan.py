@@ -182,7 +182,7 @@ from sklearn.model_selection import cross_val_score
 accuracies = cross_val_score(estimator = classifier, X = X_train, y = y_train, cv = 10) # Ten cross validations will be made
 print("Random Forest Classifier Accuracy: %0.2f (+/- %0.2f)" % (accuracies.mean(), accuracies.std() * 2))
 
-######## Parameter Tuning 
+######## Parameter Tuning #############
 
 ## Applying the Grid Search Algorithm
 
