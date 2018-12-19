@@ -202,7 +202,6 @@ grid_search = GridSearchCV(estimator = classifier,
                            scoring = 'accuracy', 
                            cv = 10, 
                            n_jobs = -1) 
-# cv = 10 means 10 K-fold validations and n_jobs = -1 means use all the available CPU memory on the computer
 
 # determine the execution time for the grid search algorithm
 t0 = time.time()
@@ -213,3 +212,28 @@ print("Took 0.2f seconds" % (t1-t0))
 rf_best_accuracy = grid_search.best_score_
 rf_best_parameters = grid_search.best_params_
 rf_best_accuracy, rf_best_parameters
+
+############# Run round 2 according to the results obtained from round to confirm the optimisation parameter
+
+# predicting the test set
+y_pred = grid_search.predict(X_test)
+
+# determining the accurancy and performance
+from sklearn.metrics import confusion_matrix, accuracy_score, f1_score, precision_score, recall_score
+acc = accuracy_score(y_test, y_pred)
+prec =  precision_score(y_test, y_pred)
+rec =  recall_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+
+# store the results in a pandas dataframe
+model_results = pd.DataFrame([['Random Forest (n=100, GridSearchX2 + Entropy)', acc, prec, rec, f1]], 
+               columns = ['Model', 'Accuracy', 'Precision', 'Recall', 'F1 Score'])
+
+# append the model_results to to the result dataframe
+results = results.append(model_results, ignore_index = True)
+
+# Foramting final rseults 
+
+final_results = pd.concat([y_test, users], axis = 1).dropna() 
+final_results['predictions'] = y_pred
+final_results = final_results[['enrty_id', 'e_signed', 'predictions']]
