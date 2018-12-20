@@ -25,6 +25,7 @@ dataset.describe()
 # removing NaN
 dataset.isna().any() # this code checks if there is any missing data in the dataset # no NaNs
 
+
 # Plotting the Histogram
 
 # create a new dataset without e_signed(prediction variable), entry_id since it carries no value and pay_schedule column(categorical variable)
