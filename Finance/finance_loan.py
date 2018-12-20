@@ -17,6 +17,7 @@ dataset = pd.read_csv('financial_data.csv')
 
 # visualising the content of the dataset
 dataset.head()
+#bullshit line
 
 # visualising the statistics of the content in the dataset
 dataset.describe()
